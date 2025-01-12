@@ -109,64 +109,6 @@ export default function ProvidersTab() {
             />
           </div>
         )}
-        {provider.name === 'onDemand' && provider.settings.enabled && (
-          <div className="mt-2">
-            <label className="block text-sm text-bolt-elements-textSecondary mb-2">
-              Session ID:
-            </label>
-            <input
-              type="text"
-              value={provider.settings.sessionId || ''}
-              onChange={(e) => {
-                updateProviderSettings(provider.name, { ...provider.settings, sessionId: e.target.value });
-                logStore.logProvider(`Session ID updated for ${provider.name}`, {
-                  provider: provider.name,
-                  sessionId: e.target.value,
-                });
-              }}
-              placeholder="Enter session ID"
-              className="w-full bg-white dark:bg-bolt-elements-background-depth-4 relative px-2 py-1.5 rounded-md focus:outline-none placeholder-bolt-elements-textTertiary text-bolt-elements-textPrimary dark:text-bolt-elements-textPrimary border border-bolt-elements-borderColor"
-            />
-            <label className="block text-sm text-bolt-elements-textSecondary mb-2">
-              API Key:
-            </label>
-            <input
-              type="text"
-              value={provider.settings.apiKey || ''}
-              onChange={(e) => {
-                 updateProviderSettings(provider.name, { ...provider.settings, apiKey: e.target.value });
-                logStore.logProvider(`API Key updated for ${provider.name}`, {
-                  provider: provider.name,
-                  apiKey: e.target.value,
-                });
-              }}
-              placeholder="Enter API key"
-              className="w-full bg-white dark:bg-bolt-elements-background-depth-4 relative px-2 py-1.5 rounded-md focus:outline-none placeholder-bolt-elements-textTertiary text-bolt-elements-textPrimary dark:text-bolt-elements-textPrimary border border-bolt-elements-borderColor"
-            />
-             <label className="block text-sm text-bolt-elements-textSecondary mb-2">
-              Endpoint ID:
-            </label>
-            <select
-              value={provider.settings.endpointId || ''}
-              onChange={(e) => {
-                updateProviderSettings(provider.name, { ...provider.settings, endpointId: e.target.value });
-                 logStore.logProvider(`Endpoint ID updated for ${provider.name}`, {
-                  provider: provider.name,
-                  endpointId: e.target.value,
-                });
-              }}
-              className="w-full bg-white dark:bg-bolt-elements-background-depth-4 relative px-2 py-1.5 rounded-md focus:outline-none placeholder-bolt-elements-textTertiary text-bolt-elements-textPrimary dark:text-bolt-elements-textPrimary border border-bolt-elements-borderColor"
-            >
-              <option value="">Select endpoint ID</option>
-              <option value="predefined-openai-gpt4o">GPT-4o</option>
-              <option value="predefined-openai-gpt4turbo">GPT-4</option>
-              <option value="predefined-openai-gpt3.5turbo">GPT-3.5</option>
-              <option value="predefined-gemini-1.5-pro">Gemini Pro 1.5</option>
-              <option value="predefined-gemini-1.5-flash">Gemini Flash 1.5</option>
-              <option value="predefined-airev-jais-70b">JAIS (Arabic)</option>
-            </select>
-          </div>
-        )}
       </div>
     );
   };

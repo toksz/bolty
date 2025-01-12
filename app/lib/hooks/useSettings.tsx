@@ -151,9 +151,8 @@ export function useSettings() {
       .filter(([_key, provider]) => provider.settings.enabled)
       .map(([_k, p]) => p);
 
-    // Ensure onDemand is always included
     if (!isLocalModel) {
-      active = active.filter((p) => !LOCAL_PROVIDERS.includes(p.name) || p.name === 'onDemand');
+      active = active.filter((p) => !LOCAL_PROVIDERS.includes(p.name));
     }
 
     setActiveProviders(active);

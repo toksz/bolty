@@ -1,8 +1,6 @@
 import type { LanguageModelV1 } from 'ai';
 import type { IProviderSetting } from '~/types/model';
 
-export type { LanguageModelV1 };
-
 export interface ModelInfo {
   name: string;
   label: string;

@@ -120,92 +120,23 @@ async function llmCallAction({ context, request }: ActionFunctionArgs) {
         throw new Error('Provider not found');
       }
 
-      let result;
-      if (providerName === 'onDemand') {
-        const onDemandSettings = providerSettings[providerName];
-        if (!onDemandSettings?.sessionId || typeof onDemandSettings.sessionId !== 'string' ||
-            !onDemandSettings?.apiKey || typeof onDemandSettings.apiKey !== 'string' ||
-            !onDemandSettings?.endpointId || typeof onDemandSettings.endpointId !== 'string') {
-          throw new Error('Missing or invalid onDemand settings');
-        }
-        if (!onDemandSettings?.sessionId || typeof onDemandSettings.sessionId !== 'string' ||
-            !onDemandSettings?.apiKey || typeof onDemandSettings.apiKey !== 'string' ||
-            !onDemandSettings?.endpointId || typeof onDemandSettings.endpointId !== 'string') {
-          throw new Error('Missing or invalid onDemand settings');
-        }
-        console.log('onDemandSettings', onDemandSettings);
-        const modelDetails = {
-          name: model,
-          provider: 'onDemand',
-        }
-        console.log('modelDetails', modelDetails);
-        const providerInfo = {
-          name: 'onDemand',
-          getModelInstance: async (options: { model: string, serverEnv: any, apiKeys?: Record<string, string>, providerSettings?: Record<string, IProviderSetting> }) => {
-            return (await import('~/lib/ondemand').then(m => m.onDemandRequest(onDemandSettings.sessionId!, onDemandSettings.apiKey!, onDemandSettings.endpointId!, message, streamOutput ? 'stream' : 'sync'))) as any
-          }
-        }
-        console.log('providerInfo', providerInfo);
-        if (streamOutput) {
-          result = await streamText({
-            options: {
-              system,
-            },
-            messages: [
-              {
-                role: 'user',
-                content: `${message}`,
-              },
-            ],
-            env: context.cloudflare.env,
-            apiKeys,
-            providerSettings,
-          });
-          return new Response(result.textStream, {
-            status: 200,
-            headers: {
-              'Content-Type': 'text/plain; charset=utf-8',
-            },
-          });
-        } else {
-          result = await generateText({
-            system,
-            messages: [
-              {
-                role: 'user',
-                content: `${message}`,
-              },
-            ],
-            model: await providerInfo.getModelInstance({
-              model: modelDetails.name,
-              serverEnv: context.cloudflare.env as any,
-              apiKeys,
-              providerSettings,
-            }) as any,
-            maxTokens: dynamicMaxTokens,
-            toolChoice: 'none',
-          });
-          console.log('onDemand result', result);
-        }
-      } else {
-        result = await generateText({
-          system,
-          messages: [
-            {
-              role: 'user',
-              content: `${message}`,
-            },
-          ],
-          model: providerInfo.getModelInstance({
-            model: modelDetails.name,
-            serverEnv: context.cloudflare.env as any,
-            apiKeys,
-            providerSettings,
-          }),
-          maxTokens: dynamicMaxTokens,
-          toolChoice: 'none',
-        });
-      }
+      const result = await generateText({
+        system,
+        messages: [
+          {
+            role: 'user',
+            content: `${message}`,
+          },
+        ],
+        model: providerInfo.getModelInstance({
+          model: modelDetails.name,
+          serverEnv: context.cloudflare.env as any,
+          apiKeys,
+          providerSettings,
+        }),
+        maxTokens: dynamicMaxTokens,
+        toolChoice: 'none',
+      });
 
       return new Response(JSON.stringify(result), {
         status: 200,

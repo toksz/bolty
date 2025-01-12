@@ -128,14 +128,7 @@ export const ChatImpl = memo(
     });
     const [provider, setProvider] = useState(() => {
       const savedProvider = Cookies.get('selectedProvider');
-      const onDemandProvider = PROVIDER_LIST.find((p) => p.name === 'onDemand') as ProviderInfo;
-      const defaultProvider = (PROVIDER_LIST.find((p) => p.name === savedProvider) || DEFAULT_PROVIDER) as ProviderInfo;
-      
-      if (onDemandProvider && activeProviders.some(p => p.name === 'onDemand')) {
-        return onDemandProvider;
-      }
-
-      return defaultProvider;
+      return (PROVIDER_LIST.find((p) => p.name === savedProvider) || DEFAULT_PROVIDER) as ProviderInfo;
     });
 
     const { showChat } = useStore(chatStore);
@@ -144,35 +137,36 @@ export const ChatImpl = memo(
 
     const [apiKeys, setApiKeys] = useState<Record<string, string>>({});
 
-    const { messages, isLoading, input, handleInputChange, setInput, stop, append, setMessages, reload } = useChat({
-      api: '/api/chat',
-      body: {
-        apiKeys,
-        files,
-        promptId,
-        contextOptimization: contextOptimizationEnabled,
-      },
-      sendExtraMessageFields: true,
-      onError: (error) => {
-        logger.error('Request failed\n\n', error);
-        toast.error(
-          'There was an error processing your request: ' + (error.message ? error.message : 'No details were returned'),
-        );
-      },
-      onFinish: (message, response) => {
-        const usage = response.usage;
+    const { messages, isLoading, input, handleInputChange, setInput, stop, append, setMessages, reload, error } =
+      useChat({
+        api: '/api/chat',
+        body: {
+          apiKeys,
+          files,
+          promptId,
+          contextOptimization: contextOptimizationEnabled,
+        },
+        sendExtraMessageFields: true,
+        onError: (e) => {
+          logger.error('Request failed\n\n', e, error);
+          toast.error(
+            'There was an error processing your request: ' + (e.message ? e.message : 'No details were returned'),
+          );
+        },
+        onFinish: (message, response) => {
+          const usage = response.usage;
 
-        if (usage) {
-          console.log('Token usage:', usage);
+          if (usage) {
+            console.log('Token usage:', usage);
 
-          // You can now use the usage data as needed
-        }
+            // You can now use the usage data as needed
+          }
 
-        logger.debug('Finished streaming');
-      },
-      initialMessages,
-      initialInput: Cookies.get(PROMPT_COOKIE_KEY) || '',
-    });
+          logger.debug('Finished streaming');
+        },
+        initialMessages,
+        initialInput: Cookies.get(PROMPT_COOKIE_KEY) || '',
+      });
     useEffect(() => {
       const prompt = searchParams.get('prompt');
 
@@ -269,6 +263,10 @@ export const ChatImpl = memo(
        * before they send another message.
        */
       await workbenchStore.saveAllFiles();
+
+      if (error != null) {
+        setMessages(messages.slice(0, -1));
+      }
 
       const fileModifications = workbenchStore.getFileModifcations();
 
@@ -499,7 +497,6 @@ export const ChatImpl = memo(
         provider={provider}
         setProvider={handleProviderChange}
         providerList={activeProviders}
-        key={activeProviders.map(p => p.name).join(',')}
         messageRef={messageRef}
         scrollRef={scrollRef}
         handleInputChange={(e) => {

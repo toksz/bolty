@@ -39,6 +39,89 @@ PROVIDER_LIST.forEach((provider) => {
     },
   };
 });
+initialProviderSettings['onDemand'] = {
+  name: 'onDemand',
+  staticModels: [
+      {
+        name: 'predefined-openai-gpt4o',
+        label: 'GPT-4o',
+        provider: 'onDemand',
+        maxTokenAllowed: 2048,
+      },
+      {
+        name: 'predefined-openai-gpt4turbo',
+        label: 'GPT-4',
+        provider: 'onDemand',
+         maxTokenAllowed: 2048,
+      },
+      {
+        name: 'predefined-openai-gpt3.5turbo',
+        label: 'GPT-3.5',
+        provider: 'onDemand',
+         maxTokenAllowed: 2048,
+      },
+      {
+        name: 'predefined-gemini-1.5-pro',
+        label: 'Gemini Pro 1.5',
+        provider: 'onDemand',
+         maxTokenAllowed: 2048,
+      },
+       {
+        name: 'predefined-gemini-1.5-flash',
+        label: 'Gemini Flash 1.5',
+        provider: 'onDemand',
+         maxTokenAllowed: 2048,
+      },
+      {
+        name: 'predefined-airev-jais-70b',
+        label: 'JAIS (Arabic)',
+        provider: 'onDemand',
+         maxTokenAllowed: 2048,
+      },
+    ],
+  settings: {
+    enabled: false,
+    baseUrl: '',
+    staticModels: [
+      {
+        name: 'predefined-openai-gpt4o',
+        label: 'GPT-4o',
+        provider: 'onDemand',
+        maxTokenAllowed: 2048,
+      },
+      {
+        name: 'predefined-openai-gpt4turbo',
+        label: 'GPT-4',
+        provider: 'onDemand',
+         maxTokenAllowed: 2048,
+      },
+      {
+        name: 'predefined-openai-gpt3.5turbo',
+        label: 'GPT-3.5',
+        provider: 'onDemand',
+         maxTokenAllowed: 2048,
+      },
+      {
+        name: 'predefined-gemini-1.5-pro',
+        label: 'Gemini Pro 1.5',
+        provider: 'onDemand',
+         maxTokenAllowed: 2048,
+      },
+       {
+        name: 'predefined-gemini-1.5-flash',
+        label: 'Gemini Flash 1.5',
+        provider: 'onDemand',
+         maxTokenAllowed: 2048,
+      },
+      {
+        name: 'predefined-airev-jais-70b',
+        label: 'JAIS (Arabic)',
+        provider: 'onDemand',
+         maxTokenAllowed: 2048,
+      },
+    ],
+  },
+};
 
 //TODO: need to create one single map for all these flags
 
