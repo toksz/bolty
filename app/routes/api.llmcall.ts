@@ -133,17 +133,19 @@ async function llmCallAction({ context, request }: ActionFunctionArgs) {
             !onDemandSettings?.endpointId || typeof onDemandSettings.endpointId !== 'string') {
           throw new Error('Missing or invalid onDemand settings');
         }
-        
+        console.log('onDemandSettings', onDemandSettings);
         const modelDetails = {
           name: model,
           provider: 'onDemand',
         }
+        console.log('modelDetails', modelDetails);
         const providerInfo = {
           name: 'onDemand',
           getModelInstance: async (options: { model: string, serverEnv: any, apiKeys?: Record<string, string>, providerSettings?: Record<string, IProviderSetting> }) => {
             return (await import('~/lib/ondemand').then(m => m.onDemandRequest(onDemandSettings.sessionId!, onDemandSettings.apiKey!, onDemandSettings.endpointId!, message, streamOutput ? 'stream' : 'sync'))) as any
           }
         }
+        console.log('providerInfo', providerInfo);
         if (streamOutput) {
           result = await streamText({
             options: {
@@ -183,6 +185,7 @@ async function llmCallAction({ context, request }: ActionFunctionArgs) {
             maxTokens: dynamicMaxTokens,
             toolChoice: 'none',
           });
+          console.log('onDemand result', result);
         }
       } else {
         result = await generateText({
