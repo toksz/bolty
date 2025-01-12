@@ -23,7 +23,6 @@ import type { ProviderInfo } from '~/types/model';
 import { useSearchParams } from '@remix-run/react';
 import { createSampler } from '~/utils/sampler';
 import { getTemplates, selectStarterTemplate } from '~/utils/selectStarterTemplate';
-import { ModelSelector } from './ModelSelector';
 
 const toastAnimation = cssTransition({
   enter: 'animated fadeInRight',
@@ -500,6 +499,7 @@ export const ChatImpl = memo(
         provider={provider}
         setProvider={handleProviderChange}
         providerList={activeProviders}
+        key={activeProviders.map(p => p.name).join(',')}
         messageRef={messageRef}
         scrollRef={scrollRef}
         handleInputChange={(e) => {
@@ -538,16 +538,7 @@ export const ChatImpl = memo(
         setImageDataList={setImageDataList}
         actionAlert={actionAlert}
         clearAlert={() => workbenchStore.clearAlert()}
-      >
-        <ModelSelector
-          model={model}
-          setModel={handleModelChange}
-          provider={provider}
-          setProvider={handleProviderChange}
-          providerList={activeProviders}
-          key={activeProviders.map(p => p.name).join(',')}
-        />
-      </BaseChat>
+      />
     );
   },
 );

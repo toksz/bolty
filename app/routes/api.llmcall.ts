@@ -128,6 +128,11 @@ async function llmCallAction({ context, request }: ActionFunctionArgs) {
             !onDemandSettings?.endpointId || typeof onDemandSettings.endpointId !== 'string') {
           throw new Error('Missing or invalid onDemand settings');
         }
+        if (!onDemandSettings?.sessionId || typeof onDemandSettings.sessionId !== 'string' ||
+            !onDemandSettings?.apiKey || typeof onDemandSettings.apiKey !== 'string' ||
+            !onDemandSettings?.endpointId || typeof onDemandSettings.endpointId !== 'string') {
+          throw new Error('Missing or invalid onDemand settings');
+        }
         
         const modelDetails = {
           name: model,

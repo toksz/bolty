@@ -26,6 +26,7 @@ export const ModelSelector = ({
 
   // Update enabled providers when cookies change
   useEffect(() => {
+    console.log('providerList', providerList);
     // If current provider is disabled, switch to first enabled provider
     if (providerList.length == 0) {
       return;

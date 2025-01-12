@@ -14,7 +14,7 @@ export const PROMPT_COOKIE_KEY = 'cachedPrompt';
 
 const llmManager = LLMManager.getInstance(import.meta.env);
 
-export const PROVIDER_LIST = llmManager.getAllProviders();
+export const PROVIDER_LIST = llmManager.getAllProviders().filter(p => p.name !== 'OpenRouter');
 export const DEFAULT_PROVIDER = llmManager.getDefaultProvider();
 
 let MODEL_LIST = llmManager.getModelList();

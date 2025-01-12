@@ -7,14 +7,14 @@ import HuggingFaceProvider from './providers/huggingface';
 import LMStudioProvider from './providers/lmstudio';
 import MistralProvider from './providers/mistral';
 import OllamaProvider from './providers/ollama';
+import OpenAILikeProvider from './providers/openai-like';
 import OpenAIProvider from './providers/openai';
-import OpenAILikeProvider from './providers/openailike';
 import PerplexityProvider from './providers/perplexity';
 import TogetherProvider from './providers/together';
-import xAIProvider from './providers/xai';
-import OnDemandProvider from './providers/ondemand';
+import XAIProvider from './providers/xai';
 import HyperbolicProvider from './providers/hyperbolic';
-import AmazonBedrockProvider from './providers/amazonbedrock';
+import AmazonBedrockProvider from './providers/amazon-bedrock';
+import OnDemandProvider from './providers/ondemand';
 
 export {
   AnthropicProvider,
@@ -29,8 +29,9 @@ export {
   OpenAIProvider,
   OpenAILikeProvider,
   PerplexityProvider,
-  xAIProvider,
+  XAIProvider,
   TogetherProvider,
   LMStudioProvider,
   AmazonBedrockProvider,
+  OnDemandProvider,
 };

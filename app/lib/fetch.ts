@@ -1,4 +1,4 @@
-type CommonRequest = Omit<RequestInit, 'body'> & { body?: URLSearchParams };
+type CommonRequest = Omit<RequestInit, 'body'> & { body?: URLSearchParams | string };
 
 export async function request(url: string, init?: CommonRequest) {
   if (import.meta.env.DEV) {
@@ -10,5 +10,11 @@ export async function request(url: string, init?: CommonRequest) {
     return nodeFetch.default(url, { ...init, agent });
   }
 
-  return fetch(url, init);
+  const fetchInit = { ...init } as RequestInit;
+  if (typeof fetchInit.body === 'string') {
+    fetchInit.body = fetchInit.body;
+  } else if (fetchInit.body && !(fetchInit.body instanceof URLSearchParams)) {
+    fetchInit.body = JSON.stringify(fetchInit.body);
+  }
+  return fetch(url, fetchInit);
 }

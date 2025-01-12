@@ -10,7 +10,7 @@ import {
   autoSelectStarterTemplate,
   enableContextOptimizationStore,
 } from '~/lib/stores/settings';
-import { useCallback, useEffect, useState, useMemo } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import type { IProviderSetting, ProviderInfo } from '~/types/model';
 import { logStore } from '~/lib/stores/logs'; // assuming logStore is imported from this location
@@ -146,12 +146,18 @@ export function useSettings() {
     Cookies.set('providers', JSON.stringify(providerSetting));
   }, [providers]);
 
-  const activeProviders = useMemo(() => {
-    if (isLocalModel) {
-      return PROVIDER_LIST.filter((p) => p.name === 'openai' || p.name === 'openailike' || p.name === 'lmstudio' || p.name === 'ollama');
+  useEffect(() => {
+    let active = Object.entries(providers)
+      .filter(([_key, provider]) => provider.settings.enabled)
+      .map(([_k, p]) => p);
+
+    // Ensure onDemand is always included
+    if (!isLocalModel) {
+      active = active.filter((p) => !LOCAL_PROVIDERS.includes(p.name) || p.name === 'onDemand');
     }
-    return PROVIDER_LIST.filter((p) => p.name !== 'lmstudio' && p.name !== 'ollama').concat(PROVIDER_LIST.filter(p => p.name === 'onDemand'));
-  }, [isLocalModel]);
+
+    setActiveProviders(active);
+  }, [providers, isLocalModel]);
 
   // helper function to update settings
   const updateProviderSettings = useCallback(
