@@ -27,7 +27,7 @@
     "prepare": "husky"
   },
   "engines": {
-    "node": ">=18.17.1"
+    "node": ">=18.18.0"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.39",

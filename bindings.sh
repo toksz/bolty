@@ -1,14 +1,16 @@
-# 🚀 Release v0.0.5
+#!/bin/bash
 
-## What's Changed 🌟
+bindings=""
 
-### 🔄 Changes since v0.0.4
+while IFS= read -r line || [ -n "$line" ]; do
+  if [[ ! "$line" =~ ^# ]] && [[ -n "$line" ]]; then
+    name=$(echo "$line" | cut -d '=' -f 1)
+    value=$(echo "$line" | cut -d '=' -f 2-)
+    value=$(echo $value | sed 's/^"\(.*\)"$/\1/')
+    bindings+="--binding ${name}=${value} "
+  fi
+done < .env.local
 
-### 🐛 Bug Fixes
+bindings=$(echo $bindings | sed 's/[[:space:]]*$//')
 
-* hotfix auto select starter template works without github token #release ([#959](https://github.com/stackblitz-labs/bolt.diy/pull/959)) by @thecodacus
-
-
-## 📈 Stats
-
-**Full Changelog**: [`v0.0.4..v0.0.5`](https://github.com/stackblitz-labs/bolt.diy/compare/v0.0.4...v0.0.5)
+echo $bindings
