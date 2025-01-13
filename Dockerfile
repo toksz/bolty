@@ -1,92 +1,91 @@
-ARG BASE=node:20.18.0
-FROM ${BASE} AS base
+# Frequently Asked Questions (FAQ)
 
-WORKDIR /app
+<details>
+<summary><strong>What are the best models for bolt.diy?</strong></summary>
 
-# Install dependencies (this step is cached as long as the dependencies don't change)
-COPY package.json pnpm-lock.yaml ./
+For the best experience with bolt.diy, we recommend using the following models:
 
-RUN corepack enable pnpm && pnpm install
+- **Claude 3.5 Sonnet (old)**: Best overall coder, providing excellent results across all use cases
+- **Gemini 2.0 Flash**: Exceptional speed while maintaining good performance
+- **GPT-4o**: Strong alternative to Claude 3.5 Sonnet with comparable capabilities
+- **DeepSeekCoder V2 236b**: Best open source model (available through OpenRouter, DeepSeek API, or self-hosted)
+- **Qwen 2.5 Coder 32b**: Best model for self-hosting with reasonable hardware requirements
 
-# Copy the rest of your app's source code
-COPY . .
+**Note**: Models with less than 7b parameters typically lack the capability to properly interact with bolt!
+</details>
 
-# Expose the port the app runs on
-EXPOSE 5173
+<details>
+<summary><strong>How do I get the best results with bolt.diy?</strong></summary>
 
-# Production image
-FROM base AS bolt-ai-production
+- **Be specific about your stack**:  
+  Mention the frameworks or libraries you want to use (e.g., Astro, Tailwind, ShadCN) in your initial prompt. This ensures that bolt.diy scaffolds the project according to your preferences.
 
-# Define environment variables with default values or let them be overridden
-ARG GROQ_API_KEY
-ARG HuggingFace_API_KEY
-ARG OPENAI_API_KEY
-ARG ANTHROPIC_API_KEY
-ARG OPEN_ROUTER_API_KEY
-ARG GOOGLE_GENERATIVE_AI_API_KEY
-ARG OLLAMA_API_BASE_URL
-ARG XAI_API_KEY
-ARG TOGETHER_API_KEY
-ARG TOGETHER_API_BASE_URL
-ARG AWS_BEDROCK_CONFIG
-ARG VITE_LOG_LEVEL=debug
-ARG DEFAULT_NUM_CTX
+- **Use the enhance prompt icon**:  
+  Before sending your prompt, click the *enhance* icon to let the AI refine your prompt. You can edit the suggested improvements before submitting.
 
-ENV WRANGLER_SEND_METRICS=false \
-    GROQ_API_KEY=${GROQ_API_KEY} \
-    HuggingFace_KEY=${HuggingFace_API_KEY} \
-    OPENAI_API_KEY=${OPENAI_API_KEY} \
-    ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY} \
-    OPEN_ROUTER_API_KEY=${OPEN_ROUTER_API_KEY} \
-    GOOGLE_GENERATIVE_AI_API_KEY=${GOOGLE_GENERATIVE_AI_API_KEY} \
-    OLLAMA_API_BASE_URL=${OLLAMA_API_BASE_URL} \
-    XAI_API_KEY=${XAI_API_KEY} \
-    TOGETHER_API_KEY=${TOGETHER_API_KEY} \
-    TOGETHER_API_BASE_URL=${TOGETHER_API_BASE_URL} \
-    AWS_BEDROCK_CONFIG=${AWS_BEDROCK_CONFIG} \
-    VITE_LOG_LEVEL=${VITE_LOG_LEVEL} \
-    DEFAULT_NUM_CTX=${DEFAULT_NUM_CTX}\
-    RUNNING_IN_DOCKER=true
+- **Scaffold the basics first, then add features**:  
+  Ensure the foundational structure of your application is in place before introducing advanced functionality. This helps bolt.diy establish a solid base to build on.
 
-# Pre-configure wrangler to disable metrics
-RUN mkdir -p /root/.config/.wrangler && \
-    echo '{"enabled":false}' > /root/.config/.wrangler/metrics.json
+- **Batch simple instructions**:  
+  Combine simple tasks into a single prompt to save time and reduce API credit consumption. For example:  
+  *"Change the color scheme, add mobile responsiveness, and restart the dev server."*
+</details>
 
-RUN pnpm run build
+<details>
+<summary><strong>How do I contribute to bolt.diy?</strong></summary>
 
-CMD [ "pnpm", "run", "dockerstart"]
+Check out our [Contribution Guide](CONTRIBUTING.md) for more details on how to get involved!
+</details>
 
-# Development image
-FROM base AS bolt-ai-development
+<details>
+<summary><strong>What are the future plans for bolt.diy?</strong></summary>
 
-# Define the same environment variables for development
-ARG GROQ_API_KEY
-ARG HuggingFace 
-ARG OPENAI_API_KEY
-ARG ANTHROPIC_API_KEY
-ARG OPEN_ROUTER_API_KEY
-ARG GOOGLE_GENERATIVE_AI_API_KEY
-ARG OLLAMA_API_BASE_URL
-ARG XAI_API_KEY
-ARG TOGETHER_API_KEY
-ARG TOGETHER_API_BASE_URL
-ARG VITE_LOG_LEVEL=debug
-ARG DEFAULT_NUM_CTX
+Visit our [Roadmap](https://roadmap.sh/r/ottodev-roadmap-2ovzo) for the latest updates.  
+New features and improvements are on the way!
+</details>
 
-ENV GROQ_API_KEY=${GROQ_API_KEY} \
-    HuggingFace_API_KEY=${HuggingFace_API_KEY} \
-    OPENAI_API_KEY=${OPENAI_API_KEY} \
-    ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY} \
-    OPEN_ROUTER_API_KEY=${OPEN_ROUTER_API_KEY} \
-    GOOGLE_GENERATIVE_AI_API_KEY=${GOOGLE_GENERATIVE_AI_API_KEY} \
-    OLLAMA_API_BASE_URL=${OLLAMA_API_BASE_URL} \
-    XAI_API_KEY=${XAI_API_KEY} \
-    TOGETHER_API_KEY=${TOGETHER_API_KEY} \
-    TOGETHER_API_BASE_URL=${TOGETHER_API_BASE_URL} \
-    AWS_BEDROCK_CONFIG=${AWS_BEDROCK_CONFIG} \
-    VITE_LOG_LEVEL=${VITE_LOG_LEVEL} \
-    DEFAULT_NUM_CTX=${DEFAULT_NUM_CTX}\
-    RUNNING_IN_DOCKER=true
+<details>
+<summary><strong>Why are there so many open issues/pull requests?</strong></summary>
 
-RUN mkdir -p ${WORKDIR}/run
-CMD pnpm run dev --host
+bolt.diy began as a small showcase project on @ColeMedin's YouTube channel to explore editing open-source projects with local LLMs. However, it quickly grew into a massive community effort!  
+
+We're forming a team of maintainers to manage demand and streamline issue resolution. The maintainers are rockstars, and we're also exploring partnerships to help the project thrive.
+</details>
+
+<details>
+<summary><strong>How do local LLMs compare to larger models like Claude 3.5 Sonnet for bolt.diy?</strong></summary>
+
+While local LLMs are improving rapidly, larger models like GPT-4o, Claude 3.5 Sonnet, and DeepSeek Coder V2 236b still offer the best results for complex applications. Our ongoing focus is to improve prompts, agents, and the platform to better support smaller local LLMs.
+</details>
+
+<details>
+<summary><strong>Common Errors and Troubleshooting</strong></summary>
+
+### **"There was an error processing this request"**
+This generic error message means something went wrong. Check both:
+- The terminal (if you started the app with Docker or `pnpm`).
+- The developer console in your browser (press `F12` or right-click > *Inspect*, then go to the *Console* tab).
+
+### **"x-api-key header missing"**
+This error is sometimes resolved by restarting the Docker container.  
+If that doesn't work, try switching from Docker to `pnpm` or vice versa. We're actively investigating this issue.
+
+### **Blank preview when running the app**
+A blank preview often occurs due to hallucinated bad code or incorrect commands.  
+To troubleshoot:
+- Check the developer console for errors.
+- Remember, previews are core functionality, so the app isn't broken! We're working on making these errors more transparent.
+
+### **"Everything works, but the results are bad"**
+Local LLMs like Qwen-2.5-Coder are powerful for small applications but still experimental for larger projects. For better results, consider using larger models like GPT-4o, Claude 3.5 Sonnet, or DeepSeek Coder V2 236b.
+
+### **"Received structured exception #0xc0000005: access violation"**
+If you are getting this, you are probably on Windows. The fix is generally to update the [Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)
+
+### **"Miniflare or Wrangler errors in Windows"**
+You will need to make sure you have the latest version of Visual Studio C++ installed (14.40.33816), more information here https://github.com/stackblitz-labs/bolt.diy/issues/19.
+</details>
+
+---
+
+Got more questions? Feel free to reach out or open an issue in our GitHub repo!
