@@ -12,9 +12,7 @@ export const PROVIDER_REGEX = /\[Provider: (.*?)\]\n\n/;
 export const DEFAULT_MODEL = 'claude-3-5-sonnet-latest';
 export const PROMPT_COOKIE_KEY = 'cachedPrompt';
 
-const llmManager = LLMManager.getInstance(Object.fromEntries(
-  Object.entries(process.env).filter(([, value]) => value !== undefined)
-) as Record<string, string>);
+const llmManager = LLMManager.getInstance(import.meta.env);
 
 export const PROVIDER_LIST = llmManager.getAllProviders();
 export const DEFAULT_PROVIDER = llmManager.getDefaultProvider();
@@ -28,10 +26,6 @@ PROVIDER_LIST.forEach((provider) => {
     apiTokenKey: provider.config.apiTokenKey,
   };
 });
-providerBaseUrlEnvKeys['onDemand'] = {
-  baseUrlKey: undefined,
-  apiTokenKey: undefined,
-};
 
 // Export the getModelList function using the manager
 export async function getModelList(options: {
@@ -144,7 +138,7 @@ export const STARTER_TEMPLATES: Template[] = [
     tags: ['vue', 'typescript', 'frontend'],
     icon: 'i-bolt:vue',
   },
-    {
+  {
     name: 'bolt-angular',
     label: 'Angular Starter',
     description: 'A modern Angular starter template with TypeScript support and best practices configuration',
