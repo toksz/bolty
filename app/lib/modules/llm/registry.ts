@@ -34,4 +34,5 @@ export {
   TogetherProvider,
   LMStudioProvider,
   AmazonBedrockProvider,
+  OnDemandProvider,
 };

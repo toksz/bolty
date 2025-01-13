@@ -24,6 +24,7 @@ const API_KEY_PROVIDERS = [
   'Cohere',
   'AzureOpenAI',
   'AmazonBedrock',
+  'OnDemand',
 ] as const;
 
 interface ApiKeys {
