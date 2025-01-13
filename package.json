@@ -32,7 +32,6 @@
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.39",
     "@ai-sdk/cohere": "^1.0.3",
-	"@ai-sdk/core": "^1.0.6",
     "@ai-sdk/google": "^0.0.52",
     "@ai-sdk/mistral": "^0.0.43",
     "@ai-sdk/openai": "^0.0.66",
@@ -103,7 +102,8 @@
     "remix-island": "^0.2.0",
     "remix-utils": "^7.7.0",
     "shiki": "^1.24.0",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.0.0",
+	"@ai-sdk/core": "^1.0.6",
   },
   "devDependencies": {
     "@blitz/eslint-plugin": "0.1.0",
@@ -136,5 +136,5 @@
   "resolutions": {
     "@typescript-eslint/utils": "^8.0.0-alpha.30"
   },
-  "packageManager": "pnpm@9.4.0"
+  "packageManager": "pnpm@9.14.4"
 }
