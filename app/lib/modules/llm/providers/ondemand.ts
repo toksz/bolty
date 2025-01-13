@@ -2,7 +2,7 @@ import { BaseProvider } from '~/lib/modules/llm/base-provider';
 import type { ModelInfo } from '~/lib/modules/llm/types';
 import type { LanguageModelV1 } from 'ai';
 import type { IProviderSetting } from '~/types/model';
-import { createClient } from '@ai-sdk/core';
+import { createClient } from '@ai-sdk/openai';
 
 export default class OnDemandProvider extends BaseProvider {
   name = 'OnDemand';
