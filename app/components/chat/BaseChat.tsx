@@ -29,6 +29,7 @@ import type { IProviderSetting, ProviderInfo } from '~/types/model';
 import { ScreenshotStateManager } from './ScreenshotStateManager';
 import { toast } from 'react-toastify';
 import StarterTemplates from './StarterTemplates';
+import { PlanTerminal } from './PlanTerminal';
 import type { ActionAlert } from '~/types/actions';
 import ChatAlert from './ChatAlert';
 import { LLMManager } from '~/lib/modules/llm/manager';
@@ -335,18 +336,21 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                 'h-full flex flex-col': chatStarted,
               })}
             >
-              <ClientOnly>
+                <ClientOnly>
                 {() => {
                   return chatStarted ? (
+                  <>
                     <Messages
-                      ref={messageRef}
-                      className="flex flex-col w-full flex-1 max-w-chat pb-6 mx-auto z-1"
-                      messages={messages}
-                      isStreaming={isStreaming}
+                    ref={messageRef}
+                    className="flex flex-col w-full flex-1 max-w-chat pb-6 mx-auto z-1"
+                    messages={messages}
+                    isStreaming={isStreaming}
                     />
+                    <PlanTerminal />
+                  </>
                   ) : null;
                 }}
-              </ClientOnly>
+                </ClientOnly>
               <div
                 className={classNames('flex flex-col gap-4 w-full max-w-chat mx-auto z-prompt mb-6', {
                   'sticky bottom-2': chatStarted,

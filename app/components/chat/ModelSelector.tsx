@@ -1,5 +1,5 @@
+import React, { useEffect } from 'react';
 import type { ProviderInfo } from '~/types/model';
-import { useEffect } from 'react';
 import type { ModelInfo } from '~/lib/modules/llm/types';
 
 interface ModelSelectorProps {
@@ -9,11 +9,11 @@ interface ModelSelectorProps {
   setProvider?: (provider: ProviderInfo) => void;
   modelList: ModelInfo[];
   providerList: ProviderInfo[];
-  apiKeys: Record<string, string>;
+  apiKeys?: Record<string, string>;
   modelLoading?: string;
 }
 
-export const ModelSelector = ({
+export const ModelSelector: React.FC<ModelSelectorProps> = ({
   model,
   setModel,
   provider,
@@ -21,13 +21,9 @@ export const ModelSelector = ({
   modelList,
   providerList,
   modelLoading,
-}: ModelSelectorProps) => {
-  // Load enabled providers from cookies
-
-  // Update enabled providers when cookies change
+}) => {
   useEffect(() => {
-    // If current provider is disabled, switch to first enabled provider
-    if (providerList.length == 0) {
+    if (providerList.length === 0) {
       return;
     }
 
@@ -35,7 +31,6 @@ export const ModelSelector = ({
       const firstEnabledProvider = providerList[0];
       setProvider?.(firstEnabledProvider);
 
-      // Also update the model to the first available one for the new provider
       const firstModel = modelList.find((m) => m.provider === firstEnabledProvider.name);
 
       if (firstModel) {
@@ -55,23 +50,29 @@ export const ModelSelector = ({
     );
   }
 
+  const handleProviderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newProvider = providerList.find((p: ProviderInfo) => p.name === e.target.value);
+
+    if (newProvider && setProvider) {
+      setProvider(newProvider);
+    }
+
+    const firstModel = [...modelList].find((m) => m.provider === e.target.value);
+
+    if (firstModel && setModel) {
+      setModel(firstModel.name);
+    }
+  };
+
+  const handleModelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setModel?.(e.target.value);
+  };
+
   return (
     <div className="mb-2 flex gap-2 flex-col sm:flex-row">
       <select
         value={provider?.name ?? ''}
-        onChange={(e) => {
-          const newProvider = providerList.find((p: ProviderInfo) => p.name === e.target.value);
-
-          if (newProvider && setProvider) {
-            setProvider(newProvider);
-          }
-
-          const firstModel = [...modelList].find((m) => m.provider === e.target.value);
-
-          if (firstModel && setModel) {
-            setModel(firstModel.name);
-          }
-        }}
+        onChange={handleProviderChange}
         className="flex-1 p-2 rounded-lg border border-bolt-elements-borderColor bg-bolt-elements-prompt-background text-bolt-elements-textPrimary focus:outline-none focus:ring-2 focus:ring-bolt-elements-focus transition-all"
       >
         {providerList.map((provider: ProviderInfo) => (
@@ -83,7 +84,7 @@ export const ModelSelector = ({
       <select
         key={provider?.name}
         value={model}
-        onChange={(e) => setModel?.(e.target.value)}
+        onChange={handleModelChange}
         className="flex-1 p-2 rounded-lg border border-bolt-elements-borderColor bg-bolt-elements-prompt-background text-bolt-elements-textPrimary focus:outline-none focus:ring-2 focus:ring-bolt-elements-focus transition-all lg:max-w-[70%]"
         disabled={modelLoading === 'all' || modelLoading === provider?.name}
       >

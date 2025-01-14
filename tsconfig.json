@@ -1,7 +1,16 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["@remix-run/cloudflare", "vite/client", "@cloudflare/workers-types/2023-07-01", "@types/dom-speech-recognition"],
+    "types": [
+      "@remix-run/cloudflare", 
+      "vite/client", 
+      "@cloudflare/workers-types", 
+      "@types/dom-speech-recognition",
+      "@types/react",
+      "@types/react-dom",
+      "@nanostores/react"
+    ],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
@@ -18,9 +27,10 @@
     "paths": {
       "~/*": ["./app/*"]
     },
-
-    // vite takes care of building everything, not tsc
-    "noEmit": true
+    "noEmit": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "include": [
     "**/*.ts",
@@ -29,5 +39,10 @@
     "**/.server/**/*.tsx",
     "**/.client/**/*.ts",
     "**/.client/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
   ]
 }

@@ -1,4 +1,6 @@
 import { convertToCoreMessages, streamText as _streamText } from 'ai';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { MAX_TOKENS } from './constants';
 import { getSystemPrompt } from '~/lib/common/prompts/prompts';
 import {
@@ -218,6 +220,14 @@ export async function streamText(props: {
       allowedHtmlElements: allowedHTMLElements,
       modificationTagName: MODIFICATIONS_TAG_NAME,
     }) ?? getSystemPrompt();
+
+  // Add plan.md content to the system prompt
+  try {
+    const planContent = readFileSync(join(WORK_DIR, 'plan.md'), 'utf-8');
+    systemPrompt = `${systemPrompt}\n\nCurrent Implementation Plan:\n${planContent}`;
+  } catch (error) {
+    logger.warn('Failed to read plan.md:', error);
+  }
 
   if (files && contextOptimization) {
     const codeContext = createFilesContext(files);
